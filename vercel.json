@@ -18,5 +18,8 @@
     { "src": "/api/(.*)", "dest": "apps/http-backend/dist/$1.js" },
     { "src": "/ws/(.*)",  "dest": "apps/ws-backend/dist/$1.js" },
     { "src": "/(.*)",     "dest": "apps/excelidraw-frontend/$1" }
-  ]
+  ],
+  "installCommand": "pnpm install --frozen-lockfile --filter \"apps/excelidraw-frontend...\"",
+  "buildCommand":   "pnpm --filter \"apps/excelidraw-frontend\" run build",
+  "outputDirectory": "apps/excelidraw-frontend/.next"
 }
