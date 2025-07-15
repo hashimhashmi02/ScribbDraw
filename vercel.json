@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "apps/excelidraw-frontend/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "apps/http-backend/**/*.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "apps/ws-backend/**/*.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "apps/http-backend/dist/$1.js" },
+    { "src": "/ws/(.*)",  "dest": "apps/ws-backend/dist/$1.js" },
+    { "src": "/(.*)",     "dest": "apps/excelidraw-frontend/$1" }
+  ]
+}
