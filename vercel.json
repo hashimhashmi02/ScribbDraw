@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "apps/excelidraw-frontend/package.json",
+      "src": "apps/excelidraw-frontend",
       "use": "@vercel/next"
     },
     {
