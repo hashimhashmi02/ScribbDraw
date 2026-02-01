@@ -85,7 +85,7 @@ export function Canvas({ roomId, socket }: CanvasProps) {
   });
 
   return (
-    <div style={{ height: "100vh", overflow: "hidden", position: "relative", background: "#111" }}>
+    <div style={{ height: "100vh", overflow: "hidden", position: "relative", background: "#000" }}>
       <canvas
         ref={canvasRef}
         width={window.innerWidth}

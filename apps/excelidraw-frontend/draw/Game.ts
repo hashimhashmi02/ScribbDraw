@@ -134,8 +134,7 @@ export class Game {
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.clearRect(0, 0, cw, ch);
 
-    this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, cw, ch);
+
 
   
     this.ctx.setTransform(this.scale, 0, 0, this.scale, this.originX, this.originY);

@@ -1,9 +1,11 @@
+import "dotenv/config";
 import { WebSocket, WebSocketServer } from 'ws';
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from '@repo/backend-common/config';
 import { prismaClient } from "@repo/db/clients";
 
-const wss = new WebSocketServer({ port: 8080 });
+const WS_PORT = Number(process.env.WS_PORT) || 8080;
+const wss = new WebSocketServer({ port: WS_PORT });
 
 interface User {
   ws: WebSocket,
@@ -70,7 +72,7 @@ wss.on('connection', function connection(ws, request) {
       if (!user) {
         return;
       }
-      user.rooms = user?.rooms.filter(x => x === parsedData.room);
+      user.rooms = user.rooms.filter(x => x !== parsedData.roomId);
     }
 
     console.log("message received")
@@ -99,6 +101,15 @@ wss.on('connection', function connection(ws, request) {
       })
     }
 
+  });
+
+  // Clean up when connection closes
+  ws.on('close', function close() {
+    const userIndex = users.findIndex(x => x.ws === ws);
+    if (userIndex !== -1) {
+      users.splice(userIndex, 1);
+    }
+    console.log('Client disconnected');
   });
 
 });

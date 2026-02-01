@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config";
@@ -5,6 +6,7 @@ import { middleware } from "./middleware";
 import {CreateUserSchema ,SigninSchema ,CreateRoomSchema }from "@repo/common/types";
 import { prismaClient } from "@repo/db/clients";
 import cors from "cors";
+import bcrypt from "bcrypt";
 
 
 const app = express();
@@ -22,10 +24,11 @@ app.post("/signup", async (req, res) => {
         return;
     }
     try {
+        const hashedPassword = await bcrypt.hash(parsedData.data.password, 10);
         const user = await prismaClient.user.create({
             data: {
                 email: parsedData.data?.username,
-                passowrd: parsedData.data.password,
+                password: hashedPassword,
                 name: parsedData.data.name
             }
         })
@@ -51,13 +54,21 @@ app.post("/signin", async (req, res) => {
     
     const user = await prismaClient.user.findFirst({
         where: {
-            email: parsedData.data.username,
-            passowrd: parsedData.data.password
+            email: parsedData.data.username
         }
     })
 
     if (!user) {
         res.status(403).json({
+            message: "Not authorized"
+        })
+        return;
+    }
+
+    const passwordMatch = await bcrypt.compare(parsedData.data.password, user.password);
+
+    if (!passwordMatch) {
+         res.status(403).json({
             message: "Not authorized"
         })
         return;
@@ -80,8 +91,14 @@ app.post("/room", middleware, async (req, res) => {
         })
         return;
     }
-    // @ts-ignore: TODO: Fix this
     const userId = req.userId;
+
+    if (!userId) {
+        res.status(403).json({
+            message: "Unauthorized"
+        })
+        return;
+    }
 
     try {
         const room = await prismaClient.room.create({
