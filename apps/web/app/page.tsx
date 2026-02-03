@@ -1,35 +1,15 @@
-"use client";
-import { useState } from "react";
-import styles from "./page.module.css";
-import { useRouter } from "next/navigation";
+import Hero from "@/components/landing/Hero";
+import Features from "@/components/landing/Features";
 
-export default function Home(){
-  const [roomId, setRoomId] = useState("");
-  const router = useRouter();
-  
-
-
-
-
+export default function Home() {
   return (
-    <div style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      width: "100vw"
-    }}>
-      <div>
-        <input style={{
-          padding: 10
-        }} value={roomId} onChange={(e) => {
-          setRoomId(e.target.value);
-        }} type="text" placeholder="Room id"></input>
+    <main className="flex min-h-screen flex-col bg-background">
+      <Hero />
+      <Features />
 
-        <button style={{padding: 10}} onClick={() => {
-          router.push(`/room/${roomId}`);
-        }}>Join room</button>
-      </div>
-    </div>
+      <footer className="border-t border-white/10 bg-black py-8 text-center text-sm text-white/40">
+        <p>© {new Date().getFullYear()} ScribDraw. All rights reserved.</p>
+      </footer>
+    </main>
   );
 }
